@@ -5,10 +5,13 @@
 using namespace std;
 
 const lest::test specification[] = {
-    CASE( "Empty string has length zero (succeed)" )
+
+    CASE( "Message has length 2")
     {
-        EXPECT( 0 == string(  ).length() );
-        EXPECT( 0 == string("").length() );
+        Message message(Message::PINGRESP);
+        message.writeVarInt(1);
+        EXPECT( 2 == message.bytes().size() );
+        EXPECT( Message::PINGRESP == message.type() );
     },
 };
 

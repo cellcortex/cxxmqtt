@@ -4,9 +4,6 @@
 
 class Message {
 public:
-    Message();
-    virtual ~Message();
-    void writeVarInt(unsigned int value);
     enum MessageType {
         RESERVED = 0,
         CONNECT = 1,	    //	Client request to connect to Server
@@ -25,6 +22,28 @@ public:
         DISCONNECT = 14,	//	Client is Disconnecting
         LAST = 15	        //	Reserved
     };
+
+    enum QoS {
+        AT_MOST_ONCE = 0,   // Fire and Forget
+        AT_LEAST_ONCE = 1,  // Acknowledged delivery
+        EXACTLY_ONCE = 2,   // Assured delivery
+        LAST = 4
+    }
+
+    Message(MessageType type);
+    virtual ~Message();
+    void writeVarInt(unsigned int value);
+
+    MessageType type() const;
+    void setType(MessageType type);
+
+    QoS qos() const;
+    void setQoS(QoS qos);
+
+    bool retain() const;
+    void setRetain(bool retain);
+
+    const std::vector<unsigned char> & bytes() const;
 
 
 private:
