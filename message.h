@@ -20,15 +20,15 @@ public:
         PINGREQ = 12,	    //	PING Request
         PINGRESP = 13,	    //	PING Response
         DISCONNECT = 14,	//	Client is Disconnecting
-        LAST = 15	        //	Reserved
+        TYPE_LAST = 15	        //	Reserved
     };
 
     enum QoS {
         AT_MOST_ONCE = 0,   // Fire and Forget
         AT_LEAST_ONCE = 1,  // Acknowledged delivery
         EXACTLY_ONCE = 2,   // Assured delivery
-        LAST = 4
-    }
+        QOS_LAST = 4
+    };
 
     Message(MessageType type);
     virtual ~Message();
@@ -37,11 +37,15 @@ public:
     MessageType type() const;
     void setType(MessageType type);
 
+    bool dup() const;
+    void setDup(bool dup);
+
     QoS qos() const;
     void setQoS(QoS qos);
 
     bool retain() const;
     void setRetain(bool retain);
+
 
     const std::vector<unsigned char> & bytes() const;
 

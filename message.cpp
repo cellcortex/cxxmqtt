@@ -19,6 +19,23 @@ Message::QoS Message::qos() const {
     return static_cast<Message::QoS>((myBytes[0] >> 1) & 3);
 }
 
+void Message::setQoS(Message::QoS qos) {
+    myBytes[0] &= 0xf9;
+    myBytes[0] |= qos << 1;
+}
+
+bool Message::dup() const {
+    return ((myBytes[0] >> 3) & 1);
+}
+
+void Message::setDup(bool dup) {
+    if (dup) {
+        myBytes[0] |= 0x08;
+    } else {
+        myBytes[0] &= 0xf7;
+    }
+}
+
 bool Message::retain() const {
     return 1 & myBytes[0];
 }
