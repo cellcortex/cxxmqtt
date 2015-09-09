@@ -51,7 +51,7 @@ public:
 
     const std::vector<unsigned char> & bytes() const;
 
-    void parse(std::istream & input); 
+    void parse(std::istream & input);
 
 private:
     std::vector<unsigned char> myBytes; 
