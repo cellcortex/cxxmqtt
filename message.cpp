@@ -3,6 +3,9 @@
 #include <bitset>
 #include <cassert>
 
+Message::Message() {
+}
+
 Message::Message(Message::MessageType type) {
     unsigned char h = type << 4;
     myBytes.reserve(2);
@@ -60,4 +63,22 @@ void Message::writeVarInt(unsigned int value) {
 
 const std::vector<unsigned char> & Message::bytes() const {
     return myBytes;
+}
+
+unsigned int Message::readVarInt(std::istream & input) {
+    unsigned int b = input.get();
+    unsigned int result = b & 0x7f;
+    if (!(b & 0x80)) goto done;
+    b = input.get(); result += b <<  7; if (!(b & 0x80)) goto done;
+    b = input.get(); result += b << 14; if (!(b & 0x80)) goto done;
+    b = input.get(); result += b << 21; if (!(b & 0x80)) goto done;
+    b = input.get(); result += b << 28; if (!(b & 0x80)) goto done;
+    // "result -= 0x80 << 28" is irrevelant.
+    //
+done:
+    return result;
+}
+
+void Message::parse(std::istream & input) {
+    // read the first byte
 }

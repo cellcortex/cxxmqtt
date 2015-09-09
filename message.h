@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <istream>
 
 class Message {
 public:
@@ -30,6 +31,7 @@ public:
         QOS_LAST = 4
     };
 
+    Message();
     Message(MessageType type);
     virtual ~Message();
     void writeVarInt(unsigned int value);
@@ -49,6 +51,7 @@ public:
 
     const std::vector<unsigned char> & bytes() const;
 
+    void parse(std::istream & input); 
 
 private:
     std::vector<unsigned char> myBytes; 
