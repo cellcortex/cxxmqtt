@@ -18,6 +18,17 @@ const lest::test specification[] = {
         message.setDup(true);
         EXPECT( true == message.dup() );
     },
+
+    CASE("WriteVarInt variants") {
+        Message message(Message::CONNECT);
+        message.writeVarInt(0x7f);
+        EXPECT( 2 == message.bytes().size() );
+        message.writeVarInt(0x80);
+        EXPECT( 4 == message.bytes().size() );
+        message.writeVarInt(268435455);
+        EXPECT( 8 == message.bytes().size() );
+        EXPECT( 0xff == message.bytes()[5] );
+    },
 };
 
 

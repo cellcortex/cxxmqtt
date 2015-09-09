@@ -1,6 +1,7 @@
 #include "message.h"
 #include <vector>
 #include <bitset>
+#include <cassert>
 
 Message::Message(Message::MessageType type) {
     unsigned char h = type << 4;
@@ -49,6 +50,7 @@ void Message::setRetain(bool retain) {
 }
 
 void Message::writeVarInt(unsigned int value) {
+    assert(value <= 0xfffffff);
     while (value > 0x7F) {
       myBytes.push_back((static_cast<unsigned char>(value) & 0x7F) | 0x80);
       value >>= 7;
