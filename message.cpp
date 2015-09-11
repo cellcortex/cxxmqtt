@@ -2,6 +2,7 @@
 #include <vector>
 #include <bitset>
 #include <cassert>
+#include <iostream>
 
 Message::Message() {
 }
@@ -68,14 +69,25 @@ const std::vector<unsigned char> & Message::bytes() const {
 unsigned int Message::readVarInt(std::istream & input) {
     unsigned int b = input.get();
     unsigned int result = b & 0x7f;
+    unsigned int shift = 7;
+    while (b & 0x80 && input.good()) {
+        b = input.get();
+        result += b << shift;
+        shift += 7;
+    }
+/*
     if (!(b & 0x80)) goto done;
     b = input.get(); result += b <<  7; if (!(b & 0x80)) goto done;
     b = input.get(); result += b << 14; if (!(b & 0x80)) goto done;
     b = input.get(); result += b << 21; if (!(b & 0x80)) goto done;
-    b = input.get(); result += b << 28; if (!(b & 0x80)) goto done;
+    */
+    //b = input.get(); result += b << 28; if (!(b & 0x80)) goto done;
     // "result -= 0x80 << 28" is irrevelant.
     //
 done:
+    if (!input.good()) {
+        std::cout << "error: " << input.rdstate() << std::endl;
+    }
     return result;
 }
 

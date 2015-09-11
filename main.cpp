@@ -29,6 +29,28 @@ const lest::test specification[] = {
         EXPECT( 8 == message.bytes().size() );
         EXPECT( 0xff == message.bytes()[5] );
     },
+    CASE("ReadVarInt") {
+        std::istringstream is;
+        is.str(std::string("\0", 1));
+        EXPECT(0 == Message::readVarInt(is));
+        is.str("\x01");
+        is.clear();
+        EXPECT(1 == Message::readVarInt(is));
+        is.str("\xff\x01");
+        is.clear();
+        EXPECT(0xff == Message::readVarInt(is));
+        is.str("\xff\xff\xff\x0f");
+        is.clear();
+        EXPECT(0xfffffff == Message::readVarInt(is));
+    },
+    CASE("foo") {
+        std::istringstream is;
+        is.str("\x01");
+        EXPECT(1 == is.get());
+        is.str("\xff\x01");
+        EXPECT(0xff == is.get());
+        EXPECT(0x01 == is.get());
+    },
 };
 
 

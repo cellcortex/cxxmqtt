@@ -35,6 +35,7 @@ public:
     Message(MessageType type);
     virtual ~Message();
     void writeVarInt(unsigned int value);
+    static unsigned int readVarInt(std::istream & input);
 
     MessageType type() const;
     void setType(MessageType type);
