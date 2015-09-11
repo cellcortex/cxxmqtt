@@ -36,12 +36,12 @@ const lest::test specification[] = {
         is.str("\x01");
         is.clear();
         EXPECT(1 == Message::readVarInt(is));
-        is.str("\xff\x01");
+        is.str("\x81\x7f");
         is.clear();
         EXPECT(0xff == Message::readVarInt(is));
-        is.str("\xff\xff\xff\x0f");
+        is.str("\xff\xff\xff\x7f");
         is.clear();
-        EXPECT(0xfffffff == Message::readVarInt(is));
+        EXPECT(268435455 == Message::readVarInt(is));
     },
     CASE("foo") {
         std::istringstream is;
