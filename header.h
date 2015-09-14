@@ -2,8 +2,9 @@
 
 #include <vector>
 #include <istream>
+#include "mqtt.h"
 
-class Message {
+class Header : public Mqtt {
 public:
     enum MessageType {
         RESERVED = 0,
@@ -31,11 +32,9 @@ public:
         QOS_LAST = 4
     };
 
-    Message();
-    Message(MessageType type);
-    virtual ~Message();
-    void writeVarInt(unsigned int value);
-    static unsigned int readVarInt(std::istream & input);
+    Header();
+    Header(MessageType type);
+    virtual ~Header();
 
     MessageType type() const;
     void setType(MessageType type);
@@ -48,13 +47,5 @@ public:
 
     bool retain() const;
     void setRetain(bool retain);
-
-
-    const std::vector<unsigned char> & bytes() const;
-
-    void parse(std::istream & input);
-
-private:
-    std::vector<unsigned char> myBytes; 
 };
 

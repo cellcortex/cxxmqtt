@@ -1,18 +1,18 @@
 #include <stdio.h>
-#include "message.h"
+#include "header.h"
 #include "lest.hpp"
 
 using namespace std;
 
 const lest::test specification[] = {
 
-    CASE("Message header")
+    CASE("Header header")
     {
-        Message message(Message::PINGRESP);
-        EXPECT( (Message::PINGRESP << 4) == message.bytes()[0] );
+        Header message(Header::PINGRESP);
+        EXPECT( (Header::PINGRESP << 4) == message.bytes()[0] );
         message.writeVarInt(1);
         EXPECT( 2 == message.bytes().size() );
-        EXPECT( Message::PINGRESP == message.type() );
+        EXPECT( Header::PINGRESP == message.type() );
         EXPECT( 1 == message.bytes()[1] );
         EXPECT( false == message.dup() );
         message.setDup(true);
@@ -20,7 +20,7 @@ const lest::test specification[] = {
     },
 
     CASE("WriteVarInt variants") {
-        Message message(Message::CONNECT);
+        Header message(Header::CONNECT);
         message.writeVarInt(0x7f);
         EXPECT( 2 == message.bytes().size() );
         message.writeVarInt(0x80);
@@ -32,16 +32,16 @@ const lest::test specification[] = {
     CASE("ReadVarInt") {
         std::istringstream is;
         is.str(std::string("\0", 1));
-        EXPECT(0 == Message::readVarInt(is));
+        EXPECT(0 == Header::readVarInt(is));
         is.str("\x01");
         is.clear();
-        EXPECT(1 == Message::readVarInt(is));
+        EXPECT(1 == Header::readVarInt(is));
         is.str("\x81\x7f");
         is.clear();
-        EXPECT(0xff == Message::readVarInt(is));
+        EXPECT(0xff == Header::readVarInt(is));
         is.str("\xff\xff\xff\x7f");
         is.clear();
-        EXPECT(268435455 == Message::readVarInt(is));
+        EXPECT(268435455 == Header::readVarInt(is));
     },
     CASE("foo") {
         std::istringstream is;
